@@ -4,10 +4,10 @@
   "events": [
     "night_start",
     "deposit",
-    "lantern_lit",
-    "game_over"
+    "lantern_lit"
   ],
-  "end_state": "won",
-  "requirement": "Thap het den thi thang, cong diem thoi gian + flame",
-  "t02_change_events": "v1.1 adds night_start event at tick 0"
+  "end_state": "playing",
+  "requirement": "T03 [THAY THE]: thap du 5 den KHONG con thang som (truoc day: won/all_lit)",
+  "t02_change_events": "v1.1 adds night_start event at tick 0",
+  "t03_change": "no early win; game continues until dawn"
 }

@@ -1,0 +1,33 @@
+{
+  "random_motes": false,
+  "random_shades": false,
+  "random_drifters": false,
+  "motes": [
+    [
+      0,
+      0,
+      24
+    ],
+    [
+      0.3,
+      0,
+      24
+    ],
+    [
+      0.6,
+      0,
+      24
+    ]
+  ],
+  "shades": [],
+  "drifters": [],
+  "charms": [],
+  "player": {
+    "pos": [
+      0,
+      0,
+      24
+    ],
+    "carried": 10
+  }
+}

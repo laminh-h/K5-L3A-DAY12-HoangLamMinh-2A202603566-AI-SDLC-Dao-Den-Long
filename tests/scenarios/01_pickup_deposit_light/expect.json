@@ -9,8 +9,9 @@
     "lantern_lit"
   ],
   "end_state": "playing",
-  "end_score": 200,
+  "end_score": 150,
   "requirement": "Nhat dom dom, nap anh sang, thap den, diem",
   "t02_change": "score: +10 per DEPOSITED mote (10) + 100 lit = 200 (was 120 = 2 picked*10 + 100)",
-  "t02_change_events": "v1.1 adds night_start event at tick 0"
+  "t02_change_events": "v1.1 adds night_start event at tick 0",
+  "t03_change": "per deposited mote 10 -> 5: 10*5 + 100 = 150"
 }

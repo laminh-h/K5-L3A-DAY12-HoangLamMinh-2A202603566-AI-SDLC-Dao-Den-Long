@@ -1,0 +1,13 @@
+{
+  "seed": 1,
+  "night": 1,
+  "ticks": 200,
+  "events": [
+    "night_start",
+    "game_over"
+  ],
+  "end_state": "won",
+  "end_ticks": 60,
+  "end_score": 547,
+  "requirement": "T03 Binh minh: 3/5 den sang -> won dawn_survived; diem 3x(50+floor(fuel)) + 2x50"
+}

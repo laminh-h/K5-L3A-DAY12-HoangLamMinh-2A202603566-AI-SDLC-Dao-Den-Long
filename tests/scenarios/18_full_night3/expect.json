@@ -1,8 +1,8 @@
 {
   "seed": 2026,
   "night": 3,
-  "ticks": 21600,
+  "ticks": 18000,
   "requirement": "T02 Dem 3 day du (21600 tick) chay DU tick (flames 999 de khong thua som), mac dinh day du thuc the,, tat dinh, <=30 s",
-  "end_ticks": 21600,
+  "end_ticks": 18000,
   "end_state": "lost"
 }

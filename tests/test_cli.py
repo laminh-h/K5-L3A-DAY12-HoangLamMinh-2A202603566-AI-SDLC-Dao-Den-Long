@@ -29,7 +29,7 @@ class Cli(unittest.TestCase):
     def test_contract_file(self):
         with open(config.CONTRACT_PATH, encoding="utf-8") as f:
             c = json.load(f)
-        self.assertEqual(c["contract_version"], "1.1")  # T02
+        self.assertEqual(c["contract_version"], "1.2")  # T03
         self.assertEqual(c["tuning"]["lantern_count_night1"], 5)
         for k in ("build_cmd", "run_cmd", "headless_cmd", "team"):
             self.assertTrue(c[k])

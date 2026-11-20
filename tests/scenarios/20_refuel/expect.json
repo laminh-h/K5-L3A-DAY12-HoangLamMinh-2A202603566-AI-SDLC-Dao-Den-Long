@@ -1,0 +1,11 @@
+{
+  "seed": 1,
+  "night": 1,
+  "ticks": 5,
+  "events": [
+    "night_start",
+    "refuel"
+  ],
+  "end_score": 20,
+  "requirement": "T03 Cham dau: used = min(mang, ceil((100-fuel)/10)) = 4, +5 moi dom dom"
+}

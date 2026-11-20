@@ -158,8 +158,9 @@ class Lanterns(unittest.TestCase):
         out = run(1, 1, 3, s, frames({"tick": 0, "interact": True}))
         self.assertEqual(events(out, "deposit")[0]["data"],
                          {"lantern_id": "L1", "amount": 10, "deposited": 10})
-        self.assertEqual(events(out, "lantern_lit")[0]["data"], {"lantern_id": "L1"})
-        self.assertEqual(out[-1]["score"], 10 * 10 + 100)  # T02: +10 per deposited mote
+        # T03: lantern_lit has relight flag; +5 per deposited mote, +100 first light
+        self.assertEqual(events(out, "lantern_lit")[0]["data"], {"lantern_id": "L1", "relight": False})
+        self.assertEqual(out[-1]["score"], 10 * 5 + 100)
 
     def test_partial_deposit_remembers(self):
         s = sc(player={"pos": [0, 0, 24], "carried": 3}, lanterns=[{"id": "L1", "deposited": 4}])
@@ -188,16 +189,16 @@ class Lanterns(unittest.TestCase):
         self.assertEqual(snaps(out)[0]["score"], 0)  # T02: line 0 is now night_start
         self.assertEqual([e["name"] for e in events(out)], ["night_start"])
 
-    def test_win_all_lit_and_bonus(self):
+    def test_all_lit_no_longer_wins_early(self):
+        # T03 [THAY THE]: lighting every lantern no longer ends the night (was won/all_lit in T02)
         lit = [{"id": "L%d" % i, "lit": True} for i in range(2, 6)]
         s = sc(player={"pos": [0, 0, 24], "carried": 10}, lanterns=lit, time_left_s=100)
         out = run(1, 1, 50, s, frames({"tick": 0, "interact": True}))
-        self.assertEqual(events(out, "game_over")[0]["data"], {"result": "won", "reason": "all_lit"})
-        # T02: 10*10 deposit + 100 lit + floor(99.98)*2 + 50*3
-        self.assertEqual(out[-1], {"type": "end", "ticks": 1, "state": "won",
-                                   "score": 100 + 100 + 99 * 2 + 150})
+        self.assertEqual(events(out, "game_over"), [])
+        self.assertEqual(out[-1]["state"], "playing")
 
     def test_win_on_last_tick_beats_dawn(self):
+        # T03: still valid - enough lanterns lit at the dawn tick -> dawn_survived
         lit = [{"id": "L%d" % i, "lit": True} for i in range(2, 6)]
         s = sc(player={"pos": [0, 0, 24], "carried": 10}, lanterns=lit, time_left_s=1)
         out = run(1, 1, 100, s, frames({"tick": 59, "interact": True}))

@@ -1,0 +1,13 @@
+{
+  "seed": 1,
+  "night": 1,
+  "ticks": 480,
+  "events": [
+    "night_start",
+    "fuel_drain",
+    "fuel_drain",
+    "fuel_drain",
+    "lantern_out"
+  ],
+  "requirement": "T03 Bong Muc wander toi den yeu (fuel<30), cach 2 m thi drain (tick 241), hut 5/s + hao 1/s, fuel_drain moi 60 tick, den tat ~tick 451"
+}

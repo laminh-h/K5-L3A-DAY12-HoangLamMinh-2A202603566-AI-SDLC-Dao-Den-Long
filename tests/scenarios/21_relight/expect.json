@@ -1,0 +1,12 @@
+{
+  "seed": 1,
+  "night": 1,
+  "ticks": 5,
+  "events": [
+    "night_start",
+    "deposit",
+    "lantern_lit"
+  ],
+  "end_score": 65,
+  "requirement": "T03 Thap lai den da tung sang: 5 dom dom, +40 (+5x5)"
+}

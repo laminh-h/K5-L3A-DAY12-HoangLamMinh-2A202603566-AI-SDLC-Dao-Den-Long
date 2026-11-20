@@ -1,0 +1,10 @@
+{
+  "seed": 1,
+  "night": 1,
+  "ticks": 60,
+  "events": [
+    "night_start",
+    "lantern_out"
+  ],
+  "requirement": "T03 Den hao 1/s; fuel <= 0 thi tat, deposited = 0, lantern_out (tick 30 voi 0.5 dau)"
+}

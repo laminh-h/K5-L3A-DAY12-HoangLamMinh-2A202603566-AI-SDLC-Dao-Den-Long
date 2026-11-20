@@ -1,0 +1,14 @@
+{
+  "seed": 1,
+  "night": 1,
+  "ticks": 10,
+  "events": [
+    "night_start",
+    "deposit",
+    "lantern_lit",
+    "mote_picked",
+    "mote_picked",
+    "mote_picked"
+  ],
+  "requirement": "T03 Suc chua = 10 + 2 x lan thap thanh cong (toi da 20); nhat duoc sau khi thap"
+}

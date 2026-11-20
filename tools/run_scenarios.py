@@ -23,7 +23,7 @@ def headless(args):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--phase", default="phase-2")
+    ap.add_argument("--phase", default="phase-3")
     a = ap.parse_args()
     out_dir = os.path.join(ROOT, "docs", "proof", a.phase, "runs")
     os.makedirs(out_dir, exist_ok=True)
