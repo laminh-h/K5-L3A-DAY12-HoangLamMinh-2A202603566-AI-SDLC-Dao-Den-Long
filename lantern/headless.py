@@ -1,6 +1,6 @@
-"""Headless runner (Test Contract v1.0).
+"""Headless runner (Test Contract v1.1).
 
-python3 -m lantern.headless --seed S --night 1 [--scenario f.json] [--inputs f.json]
+python3 -m lantern.headless --seed S --night {1,2,3} [--scenario f.json] [--inputs f.json]
                             --ticks N --out out.jsonl [--snapshot-every 10]
 Exit: 0 ok, 2 bad inputs/scenario/args, 1 other error (message on stderr).
 """
@@ -10,6 +10,7 @@ import sys
 
 from . import config
 from .contract_io import InputError, InputTimeline, load_json, parse_inputs, parse_scenario
+from .maps import NIGHTS
 from .sim import Game
 
 
@@ -22,13 +23,14 @@ def run(seed, night, ticks, scenario=None, timeline=None, snapshot_every=10, tun
     tuning = tuning or config.load_tuning()
     game = Game(seed, tuning, night=night, scenario=scenario)
     timeline = timeline or InputTimeline()
-    out = [game.snapshot()]
+    out = [{"type": "event", "tick": 0, "name": "night_start", "data": {"night": night}},
+           game.snapshot()]
     for k in range(ticks):
         game.step(timeline.at(k))
         out.extend(game.drain_events())
         if game.tick % snapshot_every == 0:
             out.append(game.snapshot())
-        if game.state != "playing":
+        if game.state in ("won", "lost"):
             break
     out.append({"type": "end", "ticks": game.tick, "state": game.state, "score": game.score})
     return out
@@ -47,11 +49,10 @@ def main(argv=None):
     try:
         if a.ticks < 0 or a.snapshot_every < 1:
             raise InputError("--ticks must be >= 0 and --snapshot-every >= 1")
-        if a.night != 1:
-            raise InputError("unsupported --night %d (this build has night 1)" % a.night)
+        if a.night not in NIGHTS:
+            raise InputError("unsupported --night %d (expected 1, 2 or 3)" % a.night)
         tuning = config.load_tuning()
-        n = int(tuning["lantern_count_night1"])
-        ids = {"L%d" % (i + 1) for i in range(n)}
+        ids = {"L%d" % (i + 1) for i in range(len(NIGHTS[a.night].lanterns))}
         scenario = parse_scenario(load_json(a.scenario), ids) if a.scenario else None
         timeline = parse_inputs(load_json(a.inputs)) if a.inputs else None
         lines = run(a.seed, a.night, a.ticks, scenario, timeline, a.snapshot_every, tuning)

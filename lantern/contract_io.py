@@ -2,7 +2,7 @@
 import json
 import numbers
 
-from .sim import BUTTONS, default_input
+from .sim import BUTTONS, DRIFTER_STATES, SHADE_STATES, default_input
 
 
 class InputError(Exception):
@@ -75,15 +75,21 @@ def parse_scenario(obj, lantern_ids):
         raise InputError("scenario: player must be object")
     if "pos" in p and not _vec(p["pos"], 3):
         raise InputError("scenario: player.pos must be [x,y,z]")
-    for k in ("carried", "flames"):
+    for k in ("carried", "flames", "invuln_ticks", "dash_cd_ticks", "pulse_cd_ticks",
+              "charm_ticks"):
         if k in p and not (_int(p[k]) and p[k] >= 0):
             raise InputError("scenario: player.%s must be integer >= 0" % k)
-    for k in ("random_motes", "random_shades"):
+    for k in ("random_motes", "random_shades", "random_drifters", "wind_enabled"):
         if k in obj and not isinstance(obj[k], bool):
             raise InputError("scenario: %s must be boolean" % k)
-    if "motes" in obj and not (isinstance(obj["motes"], list)
-                               and all(_vec(m, 3) for m in obj["motes"])):
-        raise InputError("scenario: motes must be array of [x,y,z]")
+    if "motes" in obj:
+        if not isinstance(obj["motes"], list):
+            raise InputError("scenario: motes must be array")
+        for m in obj["motes"]:
+            ok = _vec(m, 3) or (isinstance(m, dict) and _vec(m.get("pos"), 3)
+                                and m.get("kind", "random") in ("random", "dropped"))
+            if not ok:
+                raise InputError("scenario: mote must be [x,y,z] or {pos, kind}")
     if "shades" in obj:
         sh = obj["shades"]
         if not isinstance(sh, list):
@@ -92,6 +98,11 @@ def parse_scenario(obj, lantern_ids):
         for s in sh:
             if not isinstance(s, dict) or not _vec(s.get("pos"), 3):
                 raise InputError("scenario: each shade needs pos [x,y,z]")
+            if "state" in s and s["state"] not in SHADE_STATES:
+                raise InputError("scenario: shade state must be one of %s" % (SHADE_STATES,))
+            if "state_ticks_left" in s and not (_int(s["state_ticks_left"])
+                                                and s["state_ticks_left"] >= 0):
+                raise InputError("scenario: state_ticks_left must be integer >= 0")
             if "id" in s:
                 if not isinstance(s["id"], str) or not s["id"] or s["id"] in ids:
                     raise InputError("scenario: shade id must be unique non-empty string")
@@ -108,6 +119,27 @@ def parse_scenario(obj, lantern_ids):
                 raise InputError("scenario: lantern deposited must be integer >= 0")
             if "lit" in l and not isinstance(l["lit"], bool):
                 raise InputError("scenario: lantern lit must be boolean")
+    for key, states in (("drifters", DRIFTER_STATES), ("charms", None)):
+        if key not in obj:
+            continue
+        if not isinstance(obj[key], list):
+            raise InputError("scenario: %s must be array" % key)
+        for e in obj[key]:
+            if not isinstance(e, dict):
+                raise InputError("scenario: %s entries must be objects" % key)
+            if key == "drifters" and not _vec(e.get("pos"), 3):
+                raise InputError("scenario: drifter needs pos [x,y,z]")
+            if "pos" in e and not _vec(e["pos"], 3):
+                raise InputError("scenario: %s pos must be [x,y,z]" % key)
+            if states and "state" in e and e["state"] not in states:
+                raise InputError("scenario: drifter state must be one of %s" % (states,))
+            if "id" in e and not (isinstance(e["id"], str) and e["id"]):
+                raise InputError("scenario: id must be a non-empty string")
+            for k in ("stolen", "respawn_ticks", "state_ticks_left"):
+                if k in e and not (_int(e[k]) and e[k] >= 0):
+                    raise InputError("scenario: %s.%s must be integer >= 0" % (key, k))
+            if "available" in e and not isinstance(e["available"], bool):
+                raise InputError("scenario: charms.available must be boolean")
     if "time_left_s" in obj and not (_num(obj["time_left_s"]) and obj["time_left_s"] > 0):
         raise InputError("scenario: time_left_s must be a number > 0")
     return obj
