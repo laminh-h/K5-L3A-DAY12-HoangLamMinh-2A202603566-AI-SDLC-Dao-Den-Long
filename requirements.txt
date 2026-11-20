@@ -1,2 +1,2 @@
-# Only the 3D client needs this. Headless mode uses the Python standard library only.
 ursina==7.0.0
+psutil>=5.9

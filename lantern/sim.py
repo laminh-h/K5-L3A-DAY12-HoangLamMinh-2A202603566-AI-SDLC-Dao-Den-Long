@@ -47,7 +47,10 @@ def default_input():
 
 
 class Game:
-    def __init__(self, seed, tuning, night=1, scenario=None):
+    def __init__(self, seed, tuning, night=1, scenario=None, bench=False):
+        # bench=True (Ticket-04 benchmark scene only): no damage, pickup, fuel burn, spawns,
+        # chase or end conditions. Never used by headless/soak, so contract output is unchanged.
+        self.bench = bench
         self.t = t = tuning
         self.rng = random.Random(seed)
         self.night = night
@@ -348,7 +351,7 @@ class Game:
             if s["state"] == "drain" and s["target"]:
                 drains.setdefault(s["target"], []).append(s)
         for l in self.lanterns:
-            if not l["lit"]:
+            if not l["lit"] or self.bench:
                 continue
             ds = drains.get(l["id"], [])
             l["fuel"] -= self.fuel_decay + self.fuel_drain * len(ds)
@@ -364,7 +367,7 @@ class Game:
         # 3. player movement + fall
         self._move_player(inp, pressed)
 
-        alive = p["respawn"] == 0
+        alive = p["respawn"] == 0 and not self.bench
         # 4. pickup motes and charms
         if alive:
             cap, pr = self.capacity, float(t["pickup_radius"])
@@ -494,10 +497,13 @@ class Game:
                         break
 
         # 10. spawns (new entities act from next tick)
-        self._spawns()
+        if not self.bench:
+            self._spawns()
 
         # 11. win / lose
         # T03: no early win; at dawn need >= ceil(win_ratio * lanterns) lit
+        if self.bench:
+            return
         if p["flames"] <= 0:
             self._finish("lost", "no_flames")
         elif self.time_left <= 1e-9:
