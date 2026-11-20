@@ -23,7 +23,7 @@ def headless(args):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--phase", default="phase-1")
+    ap.add_argument("--phase", default="phase-2")
     a = ap.parse_args()
     out_dir = os.path.join(ROOT, "docs", "proof", a.phase, "runs")
     os.makedirs(out_dir, exist_ok=True)
@@ -32,7 +32,8 @@ def main():
         d = os.path.join(SCN, name)
         with open(os.path.join(d, "expect.json"), encoding="utf-8") as f:
             exp = json.load(f)
-        args = ["--seed", str(exp["seed"]), "--night", "1", "--ticks", str(exp["ticks"])]
+        args = ["--seed", str(exp["seed"]), "--night", str(exp.get("night", 1)),
+                "--ticks", str(exp["ticks"])]
         if os.path.exists(os.path.join(d, "scenario.json")):
             args += ["--scenario", os.path.relpath(os.path.join(d, "scenario.json"), ROOT)]
         args += ["--inputs", os.path.relpath(os.path.join(d, "inputs.json"), ROOT)]

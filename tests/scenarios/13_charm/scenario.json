@@ -1,0 +1,25 @@
+{
+  "random_motes": false,
+  "random_shades": false,
+  "random_drifters": false,
+  "motes": [],
+  "shades": [],
+  "drifters": [],
+  "charms": [
+    {
+      "id": "C1",
+      "pos": [
+        35,
+        0,
+        0
+      ]
+    }
+  ],
+  "player": {
+    "pos": [
+      35,
+      0,
+      0
+    ]
+  }
+}

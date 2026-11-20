@@ -1,0 +1,10 @@
+{
+  "seed": 1,
+  "night": 2,
+  "ticks": 400,
+  "events": [
+    "night_start",
+    "drifter_steal"
+  ],
+  "requirement": "T02 Gio Lac: duoi khi mang >=5 va <=15 m, cuop min(3, dang mang), bo chay 240 tick roi bien mat"
+}

@@ -1,0 +1,9 @@
+{
+  "seed": 1,
+  "night": 3,
+  "ticks": 120,
+  "events": [
+    "night_start"
+  ],
+  "requirement": "T02 Dem 3: buc nhay (0,3,13) dua len tang 2 (Y=6)"
+}

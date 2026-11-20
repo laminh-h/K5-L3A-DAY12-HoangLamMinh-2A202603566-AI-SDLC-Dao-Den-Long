@@ -1,0 +1,10 @@
+{
+  "seed": 1,
+  "night": 1,
+  "ticks": 200,
+  "events": [
+    "night_start",
+    "player_hit"
+  ],
+  "requirement": "T02 Roi khoi dao (Y<-10): -1 lua, mat het dom dom, cho 60 tick, hoi sinh o diem xuat phat"
+}

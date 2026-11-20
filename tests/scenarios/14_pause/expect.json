@@ -1,0 +1,12 @@
+{
+  "seed": 1,
+  "night": 1,
+  "ticks": 40,
+  "events": [
+    "night_start",
+    "paused",
+    "resumed"
+  ],
+  "end_state": "playing",
+  "requirement": "T02 Tam dung: tick tang, sim_tick/thoi gian dung yen, state paused"
+}

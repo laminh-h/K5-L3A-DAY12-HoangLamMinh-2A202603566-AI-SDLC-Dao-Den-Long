@@ -1,0 +1,9 @@
+{
+  "seed": 5,
+  "night": 3,
+  "ticks": 2200,
+  "events": [
+    "night_start"
+  ],
+  "requirement": "T02 Gio manh Dem 3: moi 30 s, 5 s, day 2 m/s"
+}

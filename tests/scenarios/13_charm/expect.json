@@ -1,0 +1,12 @@
+{
+  "seed": 1,
+  "night": 2,
+  "ticks": 100,
+  "events": [
+    "night_start",
+    "charm_picked",
+    "dash",
+    "dash"
+  ],
+  "requirement": "T02 Bua Gio: 600 tick, chay 7.2 m/s, luot khong hoi chieu"
+}

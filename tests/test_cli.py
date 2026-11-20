@@ -29,7 +29,7 @@ class Cli(unittest.TestCase):
     def test_contract_file(self):
         with open(config.CONTRACT_PATH, encoding="utf-8") as f:
             c = json.load(f)
-        self.assertEqual(c["contract_version"], "1.0")
+        self.assertEqual(c["contract_version"], "1.1")  # T02
         self.assertEqual(c["tuning"]["lantern_count_night1"], 5)
         for k in ("build_cmd", "run_cmd", "headless_cmd", "team"):
             self.assertTrue(c[k])
@@ -40,7 +40,8 @@ class Cli(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stderr)
         with open(out, encoding="utf-8") as f:
             lines = [json.loads(l) for l in f]
-        self.assertEqual(lines[0]["type"], "snapshot")
+        self.assertEqual(lines[0]["name"], "night_start")  # T02
+        self.assertEqual(lines[1]["type"], "snapshot")
         self.assertEqual(lines[-1]["type"], "end")
 
     def test_deterministic_files(self):

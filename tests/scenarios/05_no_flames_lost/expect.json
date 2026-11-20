@@ -2,10 +2,12 @@
   "seed": 1,
   "ticks": 2000,
   "events": [
+    "night_start",
     "player_hit",
     "player_hit",
     "game_over"
   ],
   "end_state": "lost",
-  "requirement": "Bi cham het mau (flames) thi thua; co invuln giua 2 lan cham"
+  "requirement": "Bi cham het mau (flames) thi thua; co invuln giua 2 lan cham",
+  "t02_change_events": "v1.1 adds night_start event at tick 0"
 }

@@ -1,0 +1,11 @@
+{
+  "seed": 1,
+  "night": 2,
+  "ticks": 130,
+  "events": [
+    "night_start",
+    "pulse",
+    "drifter_drop"
+  ],
+  "requirement": "T02 Toa Sang trung Gio Lac dang flee co mang do: tha lai dom dom, bien mat sau 120 tick"
+}

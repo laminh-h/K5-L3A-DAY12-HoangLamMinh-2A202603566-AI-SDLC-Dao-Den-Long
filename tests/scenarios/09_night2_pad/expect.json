@@ -1,0 +1,9 @@
+{
+  "seed": 1,
+  "night": 2,
+  "ticks": 120,
+  "events": [
+    "night_start"
+  ],
+  "requirement": "T02 Dem 2: buc nhay (20,0,18) ban sang dao B, ~1.4 s, dap trong dao (khong roi)"
+}

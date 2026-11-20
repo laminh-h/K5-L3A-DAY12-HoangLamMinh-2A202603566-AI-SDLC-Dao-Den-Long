@@ -2,9 +2,11 @@
   "seed": 1,
   "ticks": 300,
   "events": [
+    "night_start",
     "pulse",
     "player_hit"
   ],
   "end_state": "playing",
-  "requirement": "Toa sang lam choang + day lui Bong Muc; het choang thi duoi va cham nguoi choi"
+  "requirement": "Toa sang lam choang + day lui Bong Muc; het choang thi duoi va cham nguoi choi",
+  "t02_change_events": "v1.1 adds night_start event at tick 0"
 }

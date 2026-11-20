@@ -1,0 +1,11 @@
+{
+  "seed": 1,
+  "night": 1,
+  "ticks": 100,
+  "events": [
+    "night_start",
+    "dash",
+    "dash"
+  ],
+  "requirement": "T02 Luot: 14 m/s x 0.2 s, hoi chieu 1.5 s tinh tu luc bat dau (lan bam tick 30 bi bo qua)"
+}

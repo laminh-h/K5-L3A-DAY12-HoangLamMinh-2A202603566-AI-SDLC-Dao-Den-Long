@@ -2,10 +2,12 @@
   "seed": 1,
   "ticks": 600,
   "events": [
+    "night_start",
     "deposit",
     "lantern_lit",
     "game_over"
   ],
   "end_state": "won",
-  "requirement": "Thap het den thi thang, cong diem thoi gian + flame"
+  "requirement": "Thap het den thi thang, cong diem thoi gian + flame",
+  "t02_change_events": "v1.1 adds night_start event at tick 0"
 }
