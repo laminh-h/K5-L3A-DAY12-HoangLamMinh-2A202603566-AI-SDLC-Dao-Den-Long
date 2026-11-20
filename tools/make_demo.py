@@ -118,13 +118,18 @@ def main():
         "",
         "Nội dung: gameplay 3 Đêm · giao diện · test · scenario · benchmark · soak.",
         "",
-        "LƯU Ý: các đoạn gameplay trong video này do BOT tự chơi (--autoplay),",
-        "không phải người chơi. Nhãn \"BOT TỰ CHƠI\" hiện ở góc màn hình.",
-    ])
+    ] + (["Phần 1: tác giả CHƠI TRỰC TIẾP bằng bàn phím + chuột (nhãn \"NGƯỜI CHƠI THẬT\").",
+           "Phần 2: BOT tự chơi (--autoplay) để giới thiệu Đêm 2, 3 (nhãn \"BOT TỰ CHƠI\")."]
+          if a.live else
+          ["LƯU Ý: các đoạn gameplay trong video này do BOT tự chơi (--autoplay),",
+           "không phải người chơi. Nhãn \"BOT TỰ CHƠI\" hiện ở góc màn hình."]))
     seg_still(c, 7, add("00_intro.mp4"))
     if a.live:
         live = add("01_live.mp4")
-        ff("-i", a.live, "-vf", "scale=%d:%d,setsar=1,format=yuv420p" % (W, H), "-r", "30", "-an",
+        lp = os.path.join(tmp, "live_lab.png")
+        label(lp, "NGƯỜI CHƠI THẬT (tác giả) · bàn phím + chuột")
+        ff("-i", a.live, "-i", lp, "-filter_complex",
+           "[0]scale=%d:%d,setsar=1[v];[v][1]overlay=0:0,format=yuv420p" % (W, H), "-r", "30", "-an",
            "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", live)
     print("recording gameplay...", flush=True)
     seg_record(["--autoplay", "--night", "1"], 45, add("10_n1.mp4"), "BOT TỰ CHƠI · Đêm 1 – Đảo Bến", tmp)

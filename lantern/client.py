@@ -782,6 +782,10 @@ class Controller(Entity):
                 self.show_result(d["result"] == "won", d["reason"])
 
     def update(self):
+        if getattr(self.args, "record", None):
+            self._rec_frames = getattr(self, "_rec_frames", 0) + 1
+            if self._rec_frames > int(self.args.record_seconds * 30) + 2:
+                return application.quit()
         if self.mode == "bench":
             return self.bench_update()
         if self.mode != "play" or not self.game:
@@ -918,7 +922,7 @@ class Controller(Entity):
         from panda3d.core import Filename
         base.movie(namePrefix=Filename.fromOsSpecific(os.path.abspath(self.args.record)).getFullpath(), duration=self.args.record_seconds, fps=30,
                    format="png", sd=4)
-        invoke(application.quit, delay=self.args.record_seconds + 0.5)
+        # quit by captured frame count (not wall clock) so slow PNG writes never shorten a clip
 
     def save_shot(self, path):
         from panda3d.core import Filename
@@ -1070,7 +1074,6 @@ def run(args):
             from panda3d.core import Filename
             application.base.movie(namePrefix=Filename.fromOsSpecific(os.path.abspath(args.record)).getFullpath(), duration=args.record_seconds, fps=30,
                                    format="png", sd=4)
-            from ursina import invoke
-            invoke(application.quit, delay=args.record_seconds + 0.5)
+            pass  # quits by frame count in Controller.update
     app.run()
     return 0
