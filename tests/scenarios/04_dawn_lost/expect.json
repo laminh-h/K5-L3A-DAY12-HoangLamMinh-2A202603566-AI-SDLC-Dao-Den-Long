@@ -1,0 +1,10 @@
+{
+  "seed": 1,
+  "ticks": 1000,
+  "events": [
+    "game_over"
+  ],
+  "end_state": "lost",
+  "end_ticks": 120,
+  "requirement": "Het gio (binh minh) ma chua thap het den thi thua"
+}

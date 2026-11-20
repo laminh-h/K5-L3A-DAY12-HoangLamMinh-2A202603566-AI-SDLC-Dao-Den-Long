@@ -1,0 +1,10 @@
+{
+  "seed": 1,
+  "ticks": 300,
+  "events": [
+    "pulse",
+    "player_hit"
+  ],
+  "end_state": "playing",
+  "requirement": "Toa sang lam choang + day lui Bong Muc; het choang thi duoi va cham nguoi choi"
+}

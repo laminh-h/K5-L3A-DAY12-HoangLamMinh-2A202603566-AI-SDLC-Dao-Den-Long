@@ -1,0 +1,11 @@
+{
+  "seed": 1,
+  "ticks": 600,
+  "events": [
+    "deposit",
+    "lantern_lit",
+    "game_over"
+  ],
+  "end_state": "won",
+  "requirement": "Thap het den thi thang, cong diem thoi gian + flame"
+}

@@ -1,0 +1,13 @@
+{
+  "seed": 1,
+  "ticks": 120,
+  "events": [
+    "mote_picked",
+    "mote_picked",
+    "deposit",
+    "lantern_lit"
+  ],
+  "end_state": "playing",
+  "end_score": 120,
+  "requirement": "Nhat dom dom, nap anh sang, thap den, diem"
+}

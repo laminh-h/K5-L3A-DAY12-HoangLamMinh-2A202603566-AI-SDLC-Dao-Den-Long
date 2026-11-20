@@ -1,0 +1,11 @@
+{
+  "seed": 1,
+  "ticks": 2000,
+  "events": [
+    "player_hit",
+    "player_hit",
+    "game_over"
+  ],
+  "end_state": "lost",
+  "requirement": "Bi cham het mau (flames) thi thua; co invuln giua 2 lan cham"
+}
