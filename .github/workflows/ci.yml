@@ -14,7 +14,7 @@ jobs:
       - name: Unit tests
         run: python3 -m unittest discover -s tests -t . -v
       - name: Headless scenarios (2 runs each, determinism)
-        run: python3 tools/run_scenarios.py --phase phase-2
+        run: python3 tools/run_scenarios.py --phase phase-3
       - name: Contract smoke via headless_cmd
         run: |
           CMD=$(python3 -c "import json;print(json.load(open('game.contract.json'))['headless_cmd'])")

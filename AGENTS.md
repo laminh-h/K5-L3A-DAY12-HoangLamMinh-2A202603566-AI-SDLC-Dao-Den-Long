@@ -1,6 +1,6 @@
 # AGENTS.md — Đảo Đèn Lồng
 
-3D game + headless sim for the Day 12 AI SDLC lab. Requirements: PRD-0 / tickets (lab board). Current: **Ticket-02, Test Contract v1.1** (3 nights).
+3D game + headless sim for the Day 12 AI SDLC lab. Requirements: PRD-0 / tickets (lab board). Current: **Ticket-03, Test Contract v1.2** (fuel, drain, dawn win). Design: `docs/adr/`, breaking changes: `CHANGELOG.md`.
 
 ## Commands
 - Tests (must be green before you finish): `python3 -m unittest discover -s tests -t .`
@@ -19,12 +19,13 @@
 ## Rules
 - Contract output format is exact: compact JSON lines, coords rounded 3 dp, events tick = k+1, first line `night_start`.
 - Determinism: all randomness from `Game.rng` (seeded). No `time`, no global `random`, no dict-order tricks.
-- Timers are integer ticks (`round(s*60)`); emit seconds only in snapshots.
-- Shade states only: spawning, wander, chase, recoil, stunned. Iterate entities in id order (`idkey`).
+- Timers are integer ticks (`round(s*60)`); fuel is integer FU (1/60). Emit seconds/fuel floats only in output.
+- Shade states only: spawning, wander, chase, recoil, stunned, drain. Iterate entities in id order (`idkey`).
 - Creative extras must not change headless output (gate them in the app layer, or behind a flag off in headless).
 - Never edit files in `docs/proof/**/runs/` by hand; regenerate with the script.
 - Never weaken/delete a test to make it pass. If a ticket changed a rule, update the test, mark it `# T0N:` and list it in `docs/notes/phase-N-spec.md`.
-- Before blaming the engine for a red test, re-derive the expectation from the ticket's step order (AI wrote 4 wrong expectations so far).
+- Before blaming the engine for a red test, re-derive the expectation from the ticket's step order (AI wrote 6 wrong expectations so far; usual miss: step 2 fuel burn/decay before step 5).
 - A "full night" scenario must assert `end_ticks`, otherwise an early loss hides the perf check.
 - Assumptions for ambiguous requirements go in `docs/notes/phase-N-*.md`.
+- A ticket rule marked [THAY THẾ] => update tests (`# T0N`), add a CHANGELOG breaking entry; record design in an ADR.
 - Small commits, one concern each.

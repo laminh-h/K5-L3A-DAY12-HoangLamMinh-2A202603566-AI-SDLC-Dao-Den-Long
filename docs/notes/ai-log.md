@@ -26,9 +26,19 @@ Bài học → harness: thêm vào AGENTS.md và skill `verify-phase` quy tắc 
 
 Harness được cập nhật: AGENTS.md thêm 3 quy tắc (thứ tự bước, scenario full night phải kiểm `end_ticks`, đánh dấu test bị ticket thay); Stop hook và CI chạy scenario phase-2.
 
+## Phase 3
+
+| Bước | Việc giao cho AI | Kết quả / chỗ AI sai | Cách phát hiện |
+|---|---|---|---|
+| 1 | Vá engine cho Ticket-03 (dầu tính bằng số nguyên 1/60, `drain`, luật thắng, sức chứa, điểm) | Chỉ 3 test cũ đỏ, đúng các chỗ ticket đánh dấu [THAY THẾ] | Đối chiếu với ticket |
+| 2 | Viết 24 test Phase 3 | **AI sai 2 kỳ vọng**: quên bước 2 đã hao + hút dầu trước khi châm (34.9 chứ không phải 35.0); đặt sai vị trí Bóng Mực trong test "hết lửa ở tick cuối" | Tính tay lại |
+| 3 | Scenario drain | AI đặt 420 tick nhưng `drain` bắt đầu ở tick 241, nên `fuel_drain` thứ 3 rơi vào tick 421. Đã tính lại cả chuỗi (dầu 15/9/3, tắt ở tick 451) rồi mới đổi kỳ vọng | Output khớp tính tay |
+| — | Lỗi khi dùng công cụ | Heredoc Bash dài bị lỗi phân tích → chuyển sang ghi script vá vào file rồi chạy | — |
+
 ### Token / chi phí (ước tính)
 
 | Phase | Ước tính | Cách tiết kiệm |
 |---|---|---|
 | 1 (lõi + headless + test + harness) | ~cập nhật sau khi xem `/cost` | Đọc tài liệu một lần; dùng stdlib (không cài gói); test và scenario chạy local, không lặp agent |
 | 2 (engine v1.1, 3 bản đồ, 38 test mới, 12 scenario) | ~cập nhật sau khi xem `/cost` | Viết engine một lần theo đúng thứ tự bước thay vì vá dần; sinh scenario bằng script; không chạy subagent |
+| 3 (dầu/drain/luật thắng, 24 test, 7 scenario, ADR, CHANGELOG) | ~cập nhật sau khi xem `/cost` | Vá đúng chỗ bằng một script thay vì viết lại engine; tái dùng helper của test |
