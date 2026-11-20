@@ -53,6 +53,18 @@
 | Đóng góp khác | 12% "See what fills your context", 11% "Ask Read for less" (đọc file lớn, tới ~28k token × 2 lần) |
 | Model | Claude Opus 5.5, effort Medium, không dùng subagent |
 
+**Số token thật** (cộng trường `usage` trong log hội thoại Claude Code lưu trên máy, 137 lần gọi `claude-opus-5-5`):
+
+| Loại | Token |
+|---|---|
+| Đầu ra (output) | 308.807 |
+| Ghi cache (cache creation) | 435.743 |
+| Đọc cache (gửi lại ngữ cảnh mỗi lượt) | 41.876.650 |
+| Đầu vào không cache | 304 |
+| **Tổng** | **≈ 42,6 triệu** |
+
+Khoảng **98% là đọc lại ngữ cảnh**; phần AI thực sự sinh ra chỉ khoảng 0,3 triệu token. Điều này khớp với `/usage` (91% do không `/clear`). Chi phí tiền: nằm trong thuê bao Pro, không tính theo token.
+
 **Phân tích:** chi phí chủ yếu không nằm ở việc sinh code mà ở **ngữ cảnh tích lũy**. Mình giữ một hội thoại duy nhất xuyên suốt 4 phase, nên mỗi lượt phải gửi lại toàn bộ lịch sử. Cách tiết kiệm lớn nhất bị bỏ lỡ là `/clear` hoặc mở phiên mới ở đầu mỗi phase, sau khi AGENTS.md và tài liệu spec đã đủ để agent nắm lại bối cảnh.
 
 | Phase | Ước tính tương đối* | Đã tiết kiệm bằng cách |
