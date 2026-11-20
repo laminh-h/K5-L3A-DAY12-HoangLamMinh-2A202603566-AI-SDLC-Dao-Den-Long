@@ -1,94 +1,107 @@
 # Đảo Đèn Lồng
 
-> **Video demo:** *(sẽ thêm ở Phase 4)* · Đề bài lab: [docs/lab/](docs/lab/README.md)
+> **Video demo:** *(tác giả đính kèm vào [Release v1.0.0](../../releases/tag/v1.0.0))* · Bản phát hành: [v1.0.0](../../releases/tag/v1.0.0) · Đề bài lab: [docs/lab/](docs/lab/README.md)
 
-Game 3D góc nhìn thứ ba. Bạn điều khiển Mây, gom đom đóm để thắp lại các Đèn Lồng Lớn qua 3 Đêm (Đảo Bến, Đảo Cau, Đảo Chuông) trước bình minh, và né Bóng Mực cùng Gió Lạc trong sương đen.
+Game 3D góc nhìn thứ ba. Bạn là Mây, người giữ đèn nhỏ tuổi đội nón lá. Bạn gom đom đóm để thắp và giữ sáng các Đèn Lồng Lớn qua 3 Đêm (Đảo Bến, Đảo Cau, Đảo Chuông) cho tới bình minh, đồng thời né Bóng Mực hút dầu và Gió Lạc cướp đom đóm.
 
-**Trạng thái:** headless theo Test Contract **v1.2** (Ticket-03 "Đèn cạn dầu") đã xong cả 3 Đêm. Client 3D đang làm. Thay đổi: [CHANGELOG](CHANGELOG.md).
+![Đêm 1 – Đảo Bến](docs/img/night1.png)
 
-## Cài đặt và chạy (macOS / Linux, Python ≥ 3.10)
+| Đảo Chuông nhìn từ trên | Cảnh benchmark (200 Bóng Mực) | Bảng xếp hạng |
+|---|---|---|
+| ![](docs/img/overview3.png) | ![](docs/img/bench.png) | ![](docs/img/ui_leaderboard.png) |
+
+## Yêu cầu hệ thống
+
+- macOS 11+ hoặc Linux (x86_64 / arm64). Windows cũng chạy được.
+- Python **3.10–3.13** có `venv`; OpenGL 3.2+ (GPU tích hợp là đủ).
+- Chế độ headless và soak chỉ cần Python, không cần GPU.
+
+## Cài đặt và chạy (3 lệnh)
 
 ```bash
-git clone <repo> && cd K5-L3A-DAY12-HoangLamMinh-2A202603566-AI-SDLC-Dao-Den-Long
-python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt   # chỉ bản 3D cần (ursina)
-.venv/bin/python -m lantern.app                                                 # chơi
+git clone https://github.com/laminh-h/K5-L3A-DAY12-HoangLamMinh-2A202603566-AI-SDLC-Dao-Den-Long.git && cd K5-L3A-DAY12-HoangLamMinh-2A202603566-AI-SDLC-Dao-Den-Long
+python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m lantern.app
 ```
 
-Dùng venv để tránh lỗi PEP 668 "externally-managed-environment" trên Python của Homebrew và Debian/Ubuntu mới.
+Trên Windows thay `.venv/bin/python` bằng `.venv\Scripts\python`. Dùng venv để tránh lỗi PEP 668 trên Homebrew/Ubuntu.
 
-Chế độ headless **không cần cài gì** (chỉ dùng Python stdlib):
+## Điều khiển (đổi được trong Cài đặt → Đổi phím)
 
-```bash
-python3 -m lantern.headless --seed 1 --night 1 --ticks 600   # --night 1|2|3 --out out.jsonl \
-    [--scenario s.json] [--inputs i.json] [--snapshot-every 10]
-```
-
-Theo Test Contract v1.2, xem [game.contract.json](game.contract.json). Mã thoát: 0 chạy xong, 2 khi file inputs/scenario/tham số sai, 1 cho lỗi khác.
-
-## Điều khiển
-
-| Phím | Hành động |
+| Phím mặc định | Hành động |
 |---|---|
-| W A S D | Di chuyển (theo hướng camera) |
+| W A S D | Di chuyển theo hướng camera |
 | Chuột | Xoay camera |
 | Space | Nhảy |
 | Shift | Lướt (14 m/s, 0.2 s, hồi 1.5 s) |
-| Esc / P | Tạm dừng |
-| E | Nạp ánh sáng vào đèn gần nhất |
-| Q / chuột trái | Tỏa Sáng: choáng 2 s và đẩy lùi Bóng Mực trong 5 m, tốn 3 đom đóm, hồi 3 s |
-| R | Chơi lại sau khi thắng/thua |
+| E | Nạp ánh sáng / châm dầu đèn gần nhất |
+| Q / chuột trái | Tỏa Sáng: choáng và đẩy lùi Bóng Mực trong 5 m, tốn 3 đom đóm |
+| Esc / P | Tạm dừng (Tiếp tục · Chơi lại Đêm · Cài đặt · Về menu) |
 
-## Luật và cách tính điểm (Ticket-03)
+Cài đặt (được lưu): âm lượng, độ nhạy chuột, bảng màu dễ phân biệt, giảm chuyển động, chữ lớn ×1.25, đổi phím (báo phím trùng, có nút khôi phục mặc định).
 
-- **Mục tiêu:** giữ đảo sáng tới bình minh (240/270/300 s). Lúc hết giờ phải có ≥ 60% số đèn đang sáng: 3/5, 4/6, 5/7.
-- Thắp đèn lần đầu tốn 10 đom đóm. Đèn có dầu 100 và hao 1/s; hết dầu thì tắt. Thắp lại tốn 5. Nhấn E ở đèn đang sáng để châm dầu (+10 dầu mỗi đom đóm).
-- Đèn có ≥ 30 dầu giữ vùng an toàn 6 m. Dưới 30, Bóng Mực vào hút dầu 5/s, và bạn dùng Tỏa Sáng hoặc lại gần để đuổi chúng.
-- Sức chứa = 10 + 2 × số lần thắp thành công trong Đêm (tối đa 20).
-- Bị Bóng Mực chạm: −1 Ngọn Lửa (có 3), rơi một nửa số đom đóm, bất tử 1.5 s. Hết Ngọn Lửa thì thua ngay.
-- Gió Lạc (Đêm 2, 3) cướp 3 đom đóm. Bùa Gió tăng tốc trong 10 s. Rơi khỏi đảo thì mất 1 lửa và hết đom đóm.
+## Luật và điểm (Ticket-03)
+
+- **Mục tiêu:** lúc bình minh (240/270/300 s) phải có ≥ 60% số đèn đang sáng: 3/5, 4/6, 5/7. Hết 3 Ngọn Lửa thì thua ngay.
+- Thắp đèn lần đầu tốn 10 đom đóm; đèn có dầu 100 và hao 1/s. Đèn tắt thì thắp lại tốn 5. Nhấn E ở đèn đang sáng để châm dầu (+10 mỗi đom đóm).
+- Đèn có dầu ≥ 30 giữ vùng an toàn 6 m. Dưới 30, Bóng Mực vào hút dầu 5/s.
+- Sức chứa = 10 + 2 × số lần thắp thành công (tối đa 20). Gió Lạc (Đêm 2, 3) cướp 3 đom đóm. Bùa Gió cho chạy nhanh trong 10 s. Rơi khỏi đảo thì mất 1 lửa.
 
 | Sự kiện | Điểm |
 |---|---|
-| Mỗi đom đóm nạp vào đèn (thắp, thắp lại, châm dầu) | +5 |
+| Mỗi đom đóm nạp vào đèn (thắp / thắp lại / châm dầu) | +5 |
 | Thắp lần đầu / thắp lại | +100 / +40 |
-| Mỗi Bóng Mực trúng Tỏa Sáng (đang hút dầu) | +5 (+15) |
-| Bình minh khi thắng: mỗi đèn đang sáng | +50 + floor(dầu) |
-| Bình minh khi thắng: mỗi Ngọn Lửa | +50 |
+| Bóng Mực trúng Tỏa Sáng (đang hút dầu) | +5 (+15) |
+| Bình minh khi thắng: mỗi đèn sáng / mỗi Ngọn Lửa | +50 + floor(dầu) / +50 |
 
-Trong `tuning`, mọi khóa đều được game dùng thật, không có trường nào là `null`. `fall_enabled: true`: rơi khỏi đảo bị phạt.
+Tổng điểm là tổng các Đêm đã thắng, được lưu vào bảng xếp hạng (top 10) sau Bình Minh hoặc sau khi thua.
 
-Giả định và tiêu chí nghiệm thu: [Phase 1](docs/notes/phase-1-assumptions.md) · [Phase 2](docs/notes/phase-2-spec.md) · [Phase 3 ADR](docs/adr/0001-lantern-fuel-and-dawn-win.md).
-
-## Test và bằng chứng
+## Test, headless, bench, soak
 
 ```bash
-python3 -m unittest discover -s tests -t . -v   # unit test + test CLI
-python3 tools/run_scenarios.py --phase phase-3  # scenario headless, chạy 2 lần để kiểm tra tất định
+python3 -m unittest discover -s tests -t . -v                     # 109 test (unit + CLI)
+python3 tools/run_scenarios.py --phase phase-4                    # 25 scenario, mỗi cái chạy 2 lần (tất định)
+python3 -m lantern.headless --seed 1 --night 1 --ticks 600 --out out.jsonl [--scenario s.json] [--inputs i.json]
+.venv/bin/python -m lantern.app --bench --seed 42 --duration 30 --out bench.json
+.venv/bin/python -m lantern.soak --seed 7 --nights 10 --out soak.json
+.venv/bin/python -m lantern.app --export-leaderboard out.json
 ```
 
-- Bằng chứng: [Phase 1](docs/proof/phase-1/README.md) · [Phase 2](docs/proof/phase-2/README.md) · [Phase 3](docs/proof/phase-3/README.md)
-- CI chạy cả hai lệnh trên Ubuntu và macOS mỗi lần push: [.github/workflows/ci.yml](.github/workflows/ci.yml)
+- Test Contract **v1.3**: [game.contract.json](game.contract.json). Headless chỉ dùng stdlib. Mã thoát: 0 khi chạy xong, 2 khi đầu vào sai, 1 cho lỗi khác.
+- Benchmark tắt vsync (`sync-video false`). Kết quả của tác giả: [bench.json](bench.json) (Intel UHD 620: 104.7 avg / 35.4 p1-low fps, tải 1.9 s). [soak.json](soak.json): 0 crash, RAM 15.7 → 15.7 MB.
+- CI (Ubuntu + macOS) chạy test, scenario và soak mỗi lần push: [.github/workflows/ci.yml](.github/workflows/ci.yml).
+
+## Sáng tạo của tôi
+
+- **Ông Đăng**: lời dẫn riêng cho từng Đêm ở màn giới thiệu.
+- **Vệt đom đóm**: số đom đóm Mây đang mang bay vòng quanh người (chỉ là hiển thị).
+- **Nhạc và hiệu ứng âm thanh tự sinh bằng code** (`tools/gen_sounds.py`): không dùng asset ngoài.
+- **Lá bay** báo gió ở Đêm 3, bên cạnh phụ đề.
+
+Tất cả chỉ nằm ở lớp hiển thị (`lantern/client.py`), không chạm vào `sim.py`. Bằng chứng: cùng 25 scenario headless vẫn cho output giống hệt từng byte ([docs/proof/phase-4](docs/proof/phase-4/README.md)).
+
+## Tài liệu và bằng chứng
+
+| | |
+|---|---|
+| Giả định / spec | [P1](docs/notes/phase-1-assumptions.md) · [P2](docs/notes/phase-2-spec.md) · [ADR P3](docs/adr/0001-lantern-fuel-and-dawn-win.md) |
+| Bằng chứng | [P1](docs/proof/phase-1/README.md) · [P2](docs/proof/phase-2/README.md) · [P3](docs/proof/phase-3/README.md) · [P4](docs/proof/phase-4/README.md) |
+| Thay đổi | [CHANGELOG.md](CHANGELOG.md) |
+| Nhật ký AI, retro | [ai-log.md](docs/notes/ai-log.md) · [retro.md](docs/notes/retro.md) |
+| Harness AI | [AGENTS.md](AGENTS.md) (`CLAUDE.md` nạp nó) · Stop hook [.claude/hooks/stop_check.py](.claude/hooks/stop_check.py) · skill [verify-phase](.claude/skills/verify-phase/SKILL.md) |
+| Giấy phép, nguồn | [LICENSE](LICENSE) (MIT) · [CREDITS.md](CREDITS.md) |
 
 ## Cấu trúc
 
 ```text
-lantern/sim.py          luật game, tất định, không phụ thuộc đồ họa
+lantern/sim.py          luật game tất định (12 bước/tick), không phụ thuộc đồ họa
 lantern/maps.py         bản đồ chuẩn 3 Đêm
-lantern/headless.py     CLI headless theo Test Contract
-lantern/contract_io.py  kiểm tra file inputs/scenario (exit 2)
-lantern/app.py          client 3D (Ursina), chỉ hiển thị trạng thái của sim
+lantern/headless.py     CLI headless (Test Contract)
+lantern/soak.py         soak test
+lantern/bench_scene.py  cảnh benchmark + công thức FPS
+lantern/storage.py      bảng xếp hạng, cài đặt, đổi phím (lưu đĩa)
+lantern/client.py       client 3D Ursina (chỉ hiển thị + input)
+lantern/app.py          entry point (--bench / --export-leaderboard / --screenshot)
 tests/                  unit test + tests/scenarios/*
-tools/run_scenarios.py  chạy scenario, ghi bằng chứng
-docs/notes/             giả định, nhật ký AI, retro
-docs/proof/             bằng chứng từng phase
+tools/                  run_scenarios.py, gen_sounds.py
 ```
-
-## Harness AI
-
-- [AGENTS.md](AGENTS.md) (được `CLAUDE.md` nạp vào): lệnh, cấu trúc, quy tắc.
-- Stop hook [.claude/settings.json](.claude/settings.json) → [.claude/hooks/stop_check.py](.claude/hooks/stop_check.py): chặn agent kết thúc khi test hoặc scenario đỏ.
-- Skill [.claude/skills/verify-phase](.claude/skills/verify-phase/SKILL.md): quy trình chạy kiểm chứng và lưu bằng chứng trước khi gắn tag.
-
-## Sáng tạo của tôi
-
-*(sẽ bổ sung, sau khi phần lõi đã đúng)*

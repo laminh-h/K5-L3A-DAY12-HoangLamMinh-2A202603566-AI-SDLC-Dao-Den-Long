@@ -35,6 +35,16 @@ Harness được cập nhật: AGENTS.md thêm 3 quy tắc (thứ tự bước, 
 | 3 | Scenario drain | AI đặt 420 tick nhưng `drain` bắt đầu ở tick 241, nên `fuel_drain` thứ 3 rơi vào tick 421. Đã tính lại cả chuỗi (dầu 15/9/3, tắt ở tick 451) rồi mới đổi kỳ vọng | Output khớp tính tay |
 | — | Lỗi khi dùng công cụ | Heredoc Bash dài bị lỗi phân tích → chuyển sang ghi script vá vào file rồi chạy | — |
 
+## Phase 4
+
+| Bước | Việc giao cho AI | Kết quả / chỗ AI sai | Cách phát hiện |
+|---|---|---|---|
+| 1 | Sim có cờ `bench`, soak, bảng xếp hạng, cài đặt (logic thuần, có test) | 13 test mới đạt ngay | Unit test |
+| 2 | Client 3D Ursina | 5 lỗi khi chạy: đường dẫn âm thanh, HUD trùng property `right`, `Color` không slice được, quad flash phủ trắng màn hình, camera bị nghiêng (roll) do `look_at` | Traceback và **ảnh chụp màn hình do game tự chụp** |
+| 3 | Bench | 22.8 fps. AI profile ra nút thắt là draw call và setter text → 4 vòng tối ưu, lên 104–120 fps | `cProfile` + đo thật |
+| 4 | Bench | **Gần commit số đo sai**: 8.5 fps vì cửa sổ bị thu nhỏ (Panda ngủ 0.1 s/khung) | Số bất thường → đọc mã nguồn ShowBase → thêm `minimized_frames` |
+| 5 | Ảnh bench | Lỗi đơn vị: thanh dầu dùng FU (6000) | Nhìn ảnh thấy vạch cam ngang màn hình |
+
 ### Token / chi phí (ước tính)
 
 | Phase | Ước tính | Cách tiết kiệm |
@@ -42,3 +52,4 @@ Harness được cập nhật: AGENTS.md thêm 3 quy tắc (thứ tự bước, 
 | 1 (lõi + headless + test + harness) | ~cập nhật sau khi xem `/cost` | Đọc tài liệu một lần; dùng stdlib (không cài gói); test và scenario chạy local, không lặp agent |
 | 2 (engine v1.1, 3 bản đồ, 38 test mới, 12 scenario) | ~cập nhật sau khi xem `/cost` | Viết engine một lần theo đúng thứ tự bước thay vì vá dần; sinh scenario bằng script; không chạy subagent |
 | 3 (dầu/drain/luật thắng, 24 test, 7 scenario, ADR, CHANGELOG) | ~cập nhật sau khi xem `/cost` | Vá đúng chỗ bằng một script thay vì viết lại engine; tái dùng helper của test |
+| 4 (client 3D, bench, soak, leaderboard, a11y, release) | ~cập nhật sau khi xem `/cost` | Logic thuần làm trước và test được; chỉ profile khi số đo không đạt |

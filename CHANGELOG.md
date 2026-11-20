@@ -1,5 +1,22 @@
 # Changelog
 
+## [v1.0.0 / phase-4] Contract v1.3: "Bình minh" (Ticket-04)
+
+### Thêm
+- **Client 3D (Ursina)** hoàn chỉnh. Bù toàn bộ phần GUI còn thiếu của Phase 1–3: menu, giới thiệu Đêm (Ông Đăng), chuỗi 3 Đêm, Bình Minh, tạm dừng, cài đặt có lưu, âm thanh tự sinh, HUD đầy đủ, mũi tên chỉ đèn và Bóng Mực, bảng màu chuẩn, chế độ mù màu, thanh dầu nhấp nháy 1 Hz.
+- **Benchmark** `lantern.app --bench` (cảnh chuẩn 200 Bóng Mực / 100 đom đóm, camera bay vòng) → `bench.json`.
+- **Soak** `lantern.soak` (10 Đêm trong cùng một tiến trình) → `soak.json`.
+- **Bảng xếp hạng cục bộ** top 10 (lưu đĩa, hỗ trợ tên tiếng Việt), `--export-leaderboard`.
+- **Dễ tiếp cận**: đổi mọi phím (báo trùng, khôi phục mặc định), phụ đề và chỉ báo hình ảnh, giảm chuyển động, chữ ≥ 18 px và tùy chọn ×1.25.
+- `game.contract.json`: `contract_version` 1.3, `bench_cmd`, `soak_cmd`. Sim có cờ `bench` (mặc định tắt, không đổi output headless).
+- LICENSE (MIT), CREDITS.md, retro, ảnh chụp trong `docs/img/`.
+
+### Hiệu năng
+- Từ 22.8 lên 104–120 avg fps trong cảnh bench: mesh gộp bằng màu đỉnh, `RigidBodyCombiner`, `flattenStrong`, chỉ cập nhật HUD khi đổi, `gc.freeze()`.
+
+### Breaking
+- Không có thay đổi luật. `requirements.txt` thêm `psutil`.
+
 ## [phase-3] Contract v1.2: "Đèn cạn dầu" (Ticket-03)
 
 ### ⚠ Breaking changes
