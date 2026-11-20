@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+*.jsonl
+!docs/proof/**/*.jsonl
+docs/proof/**/*.run2.jsonl
+.claude/settings.local.json
+dist/
+build/
