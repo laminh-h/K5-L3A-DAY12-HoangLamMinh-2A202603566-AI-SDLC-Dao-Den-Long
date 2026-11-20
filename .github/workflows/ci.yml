@@ -14,7 +14,11 @@ jobs:
       - name: Unit tests
         run: python3 -m unittest discover -s tests -t . -v
       - name: Headless scenarios (2 runs each, determinism)
-        run: python3 tools/run_scenarios.py --phase phase-3
+        run: python3 tools/run_scenarios.py --phase phase-4
+      - name: Soak (10 nights, crashes 0, memory <= 1.2x)
+        run: |
+          python3 -m lantern.soak --seed 7 --nights 10 --out soak_ci.json
+          python3 -c "import json;s=json.load(open('soak_ci.json'));assert s['crashes']==0;assert s['mem_end_mb']<=1.2*s['mem_start_mb'],s;print(s)"
       - name: Contract smoke via headless_cmd
         run: |
           CMD=$(python3 -c "import json;print(json.load(open('game.contract.json'))['headless_cmd'])")
