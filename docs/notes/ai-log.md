@@ -49,7 +49,21 @@ Harness được cập nhật: AGENTS.md thêm 3 quy tắc (thứ tự bước, 
 
 | Phase | Ước tính | Cách tiết kiệm |
 |---|---|---|
-| 1 (lõi + headless + test + harness) | ~cập nhật sau khi xem `/cost` | Đọc tài liệu một lần; dùng stdlib (không cài gói); test và scenario chạy local, không lặp agent |
-| 2 (engine v1.1, 3 bản đồ, 38 test mới, 12 scenario) | ~cập nhật sau khi xem `/cost` | Viết engine một lần theo đúng thứ tự bước thay vì vá dần; sinh scenario bằng script; không chạy subagent |
-| 3 (dầu/drain/luật thắng, 24 test, 7 scenario, ADR, CHANGELOG) | ~cập nhật sau khi xem `/cost` | Vá đúng chỗ bằng một script thay vì viết lại engine; tái dùng helper của test |
-| 4 (client 3D, bench, soak, leaderboard, a11y, release) | ~cập nhật sau khi xem `/cost` | Logic thuần làm trước và test được; chỉ profile khi số đo không đạt |
+| 1 (lõi + headless + test + harness) | xem tổng bên dưới | Đọc tài liệu một lần; dùng stdlib (không cài gói); test và scenario chạy local, không lặp agent |
+| 2 (engine v1.1, 3 bản đồ, 38 test mới, 12 scenario) | xem tổng bên dưới | Viết engine một lần theo đúng thứ tự bước thay vì vá dần; sinh scenario bằng script; không chạy subagent |
+| 3 (dầu/drain/luật thắng, 24 test, 7 scenario, ADR, CHANGELOG) | xem tổng bên dưới | Vá đúng chỗ bằng một script thay vì viết lại engine; tái dùng helper của test |
+| 4 (client 3D, bench, soak, leaderboard, a11y, release) | xem tổng bên dưới | Logic thuần làm trước và test được; chỉ profile khi số đo không đạt |
+
+### Tổng (đo bằng `/usage`)
+
+**Số đo thật** (lệnh `/usage` của Claude Code, gói Claude Pro, ngày 2026-11-20). Gói Pro **không hiển thị số token hay chi phí tuyệt đối**, chỉ có phần trăm hạn mức:
+
+| Chỉ số | Giá trị |
+|---|---|
+| Hạn mức phiên 5 giờ đã dùng (cả buổi lab: 4 phase + video) | **76%** |
+| Hạn mức tuần đã dùng | **11%** |
+| Đóng góp lớn nhất vào hạn mức (theo `/usage`) | **91%: "Start fresh when you switch tasks"** (không `/clear` khi đổi việc) |
+| Đóng góp khác | 12% "See what fills your context", 11% "Ask Read for less" (đọc file lớn, tới ~28k token × 2 lần) |
+| Model | Claude Opus 5.5, effort Medium, không dùng subagent |
+
+**Phân tích:** chi phí chủ yếu không nằm ở việc sinh code mà ở **ngữ cảnh tích lũy**. Mình giữ một hội thoại duy nhất xuyên suốt 4 phase, nên mỗi lượt phải gửi lại toàn bộ lịch sử. Cách tiết kiệm lớn nhất bị bỏ lỡ là `/clear` hoặc mở phiên mới ở đầu mỗi phase, sau khi AGENTS.md và tài liệu spec đã đủ để agent nắm lại bối cảnh.

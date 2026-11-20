@@ -43,15 +43,30 @@
 
 ## 6. Token và chi phí
 
-| Phase | Ước tính | Tiết kiệm bằng cách |
+**Số đo thật** (lệnh `/usage` của Claude Code, gói Claude Pro, ngày 2026-11-20). Gói Pro **không hiển thị số token hay chi phí tuyệt đối**, chỉ có phần trăm hạn mức:
+
+| Chỉ số | Giá trị |
+|---|---|
+| Hạn mức phiên 5 giờ đã dùng (cả buổi lab: 4 phase + video) | **76%** |
+| Hạn mức tuần đã dùng | **11%** |
+| Đóng góp lớn nhất vào hạn mức (theo `/usage`) | **91%: "Start fresh when you switch tasks"** (không `/clear` khi đổi việc) |
+| Đóng góp khác | 12% "See what fills your context", 11% "Ask Read for less" (đọc file lớn, tới ~28k token × 2 lần) |
+| Model | Claude Opus 5.5, effort Medium, không dùng subagent |
+
+**Phân tích:** chi phí chủ yếu không nằm ở việc sinh code mà ở **ngữ cảnh tích lũy**. Mình giữ một hội thoại duy nhất xuyên suốt 4 phase, nên mỗi lượt phải gửi lại toàn bộ lịch sử. Cách tiết kiệm lớn nhất bị bỏ lỡ là `/clear` hoặc mở phiên mới ở đầu mỗi phase, sau khi AGENTS.md và tài liệu spec đã đủ để agent nắm lại bối cảnh.
+
+| Phase | Ước tính tương đối* | Đã tiết kiệm bằng cách |
 |---|---|---|
-| 1 | *(điền từ `/cost`)* | stdlib, không cài gói; đọc tài liệu một lần |
-| 2 | *(điền)* | Viết engine một lần theo đúng thứ tự bước, sinh scenario bằng script |
-| 3 | *(điền)* | Vá đúng chỗ bằng script, tái dùng helper của test |
-| 4 | *(điền)* | Profile trước khi tối ưu; chụp ảnh để kiểm tra thay vì đoán |
-| **Tổng** | *(điền)* | Không dùng subagent; không chạy lại cả bộ test khi chỉ sửa tài liệu |
+| 1 | thấp | stdlib, không cài gói; đọc tài liệu một lần |
+| 2 | cao (engine + 38 test) | Viết engine một lần theo đúng thứ tự bước, sinh scenario bằng script |
+| 3 | trung bình | Vá đúng chỗ bằng script, tái dùng helper của test |
+| 4 | cao nhất (client 3D, tối ưu, video) | Profile trước khi tối ưu; chụp ảnh để kiểm tra thay vì đoán |
+
+\* Không đo được theo từng phase (gói Pro chỉ hiện tổng phần trăm). Mức tương đối ước lượng theo khối lượng công việc và độ dài ngữ cảnh lúc đó.
 
 ## 7. Nếu làm lại
+
+- **`/clear` hoặc mở phiên mới ở đầu mỗi phase** (theo `/usage`, đây là nguồn tiêu hao chiếm 91%). AGENTS.md và spec trong `docs/notes/` đã đủ để agent nắm lại bối cảnh.
 
 - Làm **một client 3D tối giản ngay trong Phase 1** (khoảng 30 phút), rồi mới mở rộng.
 - Thêm một script "playtest" quay video tự động từ sớm, để có bằng chứng hình ảnh mỗi phase.
