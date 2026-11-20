@@ -24,3 +24,27 @@ jobs:
           CMD=$(python3 -c "import json;print(json.load(open('game.contract.json'))['headless_cmd'])")
           $CMD --seed 5 --night 1 --ticks 3600 --out out.jsonl
           tail -n 1 out.jsonl
+  contract-cmds:
+    # Runs build_cmd / soak_cmd / run_cmd --export-leaderboard exactly as written in
+    # game.contract.json on a clean macOS + Linux machine (what the grader does).
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: build_cmd
+        run: eval "$(python3 -c "import json;print(json.load(open('game.contract.json'))['build_cmd'])")"
+      - name: GUI deps import
+        run: .venv/bin/python -c "import ursina, psutil, panda3d; print('ursina', ursina.__file__)"
+      - name: soak_cmd
+        run: |
+          CMD=$(python3 -c "import json;print(json.load(open('game.contract.json'))['soak_cmd'])")
+          $CMD --seed 7 --nights 10 --out soak_ci.json && cat soak_ci.json
+      - name: run_cmd --export-leaderboard
+        run: |
+          CMD=$(python3 -c "import json;print(json.load(open('game.contract.json'))['run_cmd'])")
+          $CMD --export-leaderboard lb.json && cat lb.json
