@@ -1,0 +1,22 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -t . -v
+      - name: Headless scenarios (2 runs each, determinism)
+        run: python3 tools/run_scenarios.py --phase phase-1
+      - name: Contract smoke via headless_cmd
+        run: |
+          CMD=$(python3 -c "import json;print(json.load(open('game.contract.json'))['headless_cmd'])")
+          $CMD --seed 5 --night 1 --ticks 3600 --out out.jsonl
+          tail -n 1 out.jsonl
