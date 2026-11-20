@@ -76,7 +76,7 @@ def parse_scenario(obj, lantern_ids):
     if "pos" in p and not _vec(p["pos"], 3):
         raise InputError("scenario: player.pos must be [x,y,z]")
     for k in ("carried", "flames", "invuln_ticks", "dash_cd_ticks", "pulse_cd_ticks",
-              "charm_ticks"):
+              "charm_ticks", "successful_lights"):
         if k in p and not (_int(p[k]) and p[k] >= 0):
             raise InputError("scenario: player.%s must be integer >= 0" % k)
     for k in ("random_motes", "random_shades", "random_drifters", "wind_enabled"):
@@ -103,6 +103,8 @@ def parse_scenario(obj, lantern_ids):
             if "state_ticks_left" in s and not (_int(s["state_ticks_left"])
                                                 and s["state_ticks_left"] >= 0):
                 raise InputError("scenario: state_ticks_left must be integer >= 0")
+            if "target_lantern_id" in s and s["target_lantern_id"] not in lantern_ids:
+                raise InputError("scenario: target_lantern_id must be a lantern id")
             if "id" in s:
                 if not isinstance(s["id"], str) or not s["id"] or s["id"] in ids:
                     raise InputError("scenario: shade id must be unique non-empty string")
@@ -119,6 +121,10 @@ def parse_scenario(obj, lantern_ids):
                 raise InputError("scenario: lantern deposited must be integer >= 0")
             if "lit" in l and not isinstance(l["lit"], bool):
                 raise InputError("scenario: lantern lit must be boolean")
+            if "ever_lit" in l and not isinstance(l["ever_lit"], bool):
+                raise InputError("scenario: lantern ever_lit must be boolean")
+            if "fuel" in l and not (_num(l["fuel"]) and l["fuel"] >= 0):
+                raise InputError("scenario: lantern fuel must be a number >= 0")
     for key, states in (("drifters", DRIFTER_STATES), ("charms", None)):
         if key not in obj:
             continue

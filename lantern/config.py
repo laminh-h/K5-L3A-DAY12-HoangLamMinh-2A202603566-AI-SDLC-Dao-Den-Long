@@ -43,6 +43,8 @@ RECOIL_TICKS = 60
 EVICT_TICKS = 30
 PULSE_CENTER_DY = 0.8
 PULSE_PUSH_TICKS = 15
+DRAIN_R = 2.0                # T03: drain within 2 m of a weak lantern
+DRAIN_BREAK_R = 6.0          # T03: drain -> chase when May within 6 m
 
 # player
 FALL_Y = -10.0
