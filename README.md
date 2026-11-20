@@ -1,6 +1,6 @@
 # Đảo Đèn Lồng
 
-> **Video demo:** *(tác giả đính kèm vào [Release v1.0.0](../../releases/tag/v1.0.0))* · Bản phát hành: [v1.0.0](../../releases/tag/v1.0.0) · Đề bài lab: [docs/lab/](docs/lab/README.md)
+> **Video demo (2:42):** [demo.mp4](https://github.com/laminh-h/K5-L3A-DAY12-HoangLamMinh-2A202603566-AI-SDLC-Dao-Den-Long/releases/download/v1.0.0/demo.mp4). Phần gameplay do **bot tự chơi** (`--autoplay`); test, scenario, bench, soak là output thật, dựng bằng `tools/make_demo.py` · Bản phát hành: [v1.0.0](../../releases/tag/v1.0.0) · Đề bài lab: [docs/lab/](docs/lab/README.md)
 
 Game 3D góc nhìn thứ ba. Bạn là Mây, người giữ đèn nhỏ tuổi đội nón lá. Bạn gom đom đóm để thắp và giữ sáng các Đèn Lồng Lớn qua 3 Đêm (Đảo Bến, Đảo Cau, Đảo Chuông) cho tới bình minh, đồng thời né Bóng Mực hút dầu và Gió Lạc cướp đom đóm.
 
