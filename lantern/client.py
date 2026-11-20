@@ -427,6 +427,8 @@ class Controller(Entity):
         elif args.screenshot or args.autoplay:
             self.night = args.night
             self.start_night()
+            if getattr(args, "record", None):
+                self.start_recording()
         else:
             self.show_menu()
 
@@ -733,7 +735,10 @@ class Controller(Entity):
             dx, dz = tgt[0] - pos[0], tgt[2] - pos[2]
             d = math.hypot(dx, dz) or 1
             out["move"] = [dx / d, dz / d]
-        self.cam_yaw = math.degrees(math.atan2(out["move"][0], out["move"][1])) if tgt else self.cam_yaw
+        if tgt:
+            want = math.degrees(math.atan2(out["move"][0], out["move"][1]))
+            diff = (want - self.cam_yaw + 180) % 360 - 180
+            self.cam_yaw += diff * 0.12   # smooth turn for a watchable camera
         out["move"] = [0, 1] if tgt else [0, 0]
         out["cam_yaw_deg"] = self.cam_yaw
         return out
@@ -906,6 +911,15 @@ class Controller(Entity):
         arrow.position = (math.cos(ang) * (ar / 2 - 0.06), math.sin(ang) * 0.42)
         arrow.rotation_z = -math.degrees(ang)
 
+    def start_recording(self):
+        """Fixed 30 fps frame capture (game clock advances 1/30 s per frame) -> PREFIX_0000.png..."""
+        from ursina import invoke
+        base = application.base
+        from panda3d.core import Filename
+        base.movie(namePrefix=Filename.fromOsSpecific(os.path.abspath(self.args.record)).getFullpath(), duration=self.args.record_seconds, fps=30,
+                   format="png", sd=4)
+        invoke(application.quit, delay=self.args.record_seconds + 0.5)
+
     def save_shot(self, path):
         from panda3d.core import Filename
         application.base.win.saveScreenshot(Filename.fromOsSpecific(os.path.abspath(path)))
@@ -1052,5 +1066,11 @@ def run(args):
         ctl.waiting_key = None
         ctl.panel = None
         ctl.start_bench()
+        if getattr(args, "record", None):
+            from panda3d.core import Filename
+            application.base.movie(namePrefix=Filename.fromOsSpecific(os.path.abspath(args.record)).getFullpath(), duration=args.record_seconds, fps=30,
+                                   format="png", sd=4)
+            from ursina import invoke
+            invoke(application.quit, delay=args.record_seconds + 0.5)
     app.run()
     return 0

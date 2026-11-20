@@ -19,6 +19,8 @@ def main(argv=None):
     ap.add_argument("--screenshot", metavar="PNG")
     ap.add_argument("--night", type=int, default=1)
     ap.add_argument("--autoplay", action="store_true", help="bot input (for screenshots/demo)")
+    ap.add_argument("--record", metavar="PREFIX", help="save PNG frames at 30 fps (demo video)")
+    ap.add_argument("--record-seconds", type=float, default=20.0)
     ap.add_argument("--overview", action="store_true", help="high camera over the island (docs)")
     ap.add_argument("--ui", choices=["menu", "settings", "keys", "leaderboard", "name", "pause"],
                     help="open a UI screen (use with --screenshot)")
