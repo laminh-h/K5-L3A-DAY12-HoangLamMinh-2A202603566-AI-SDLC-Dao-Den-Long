@@ -18,7 +18,7 @@ if payload.get("stop_hook_active"):
 
 checks = [
     [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-t", "."],
-    [sys.executable, "tools/run_scenarios.py", "--phase", "phase-1"],
+    [sys.executable, "tools/run_scenarios.py"],
 ]
 for cmd in checks:
     r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
